@@ -15,7 +15,7 @@ class _DebtsState extends State<Debts> {
   bool _isLoading = true;
   // This function is used to fetch all data from the database
   void _refreshData() async {
-    final data = await DatabaseHelper.getItems();
+    final data = await DatabaseHelper.getDebt();
     setState(() {
       myData = data;
       _isLoading = false;
@@ -130,7 +130,7 @@ class _DebtsState extends State<Debts> {
   void deleteDebt(int debt_id) async {
     await DatabaseHelper.deleteDebt(debt_id);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Deletado com êxito!'), backgroundColor: Colors.green));
+        content: Text('Successfully deleted!'), backgroundColor: Colors.green));
     _refreshData();
   }
 
@@ -145,7 +145,7 @@ class _DebtsState extends State<Debts> {
               child: CircularProgressIndicator(),
             )
           : myData.isEmpty
-              ? const Center(child: Text("Nenhum cadastro ativo no momento..."))
+              ? const Center(child: Text("Nenhuma divida ativa no momento..."))
               : ListView.builder(
                   itemCount: myData.length,
                   itemBuilder: (context, index) => Card(

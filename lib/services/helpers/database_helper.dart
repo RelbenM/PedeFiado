@@ -5,34 +5,32 @@ import 'package:sqflite/sqflite.dart' as sql;
 
 class DatabaseHelper {
 
-  /*static Future<void> createTables(sql.Database database) async {
-    database.execute("");
-  } */
+   static Future<void> createTables(sql.Database database) async {
+    await database.execute("""
+      """);
+  }
 // id: indentificador do cliente
 // nome, tel, endereço: informações de contato para o cliente
 // created_at: the time that the item was created. It will be automatically handled by SQLite
 
   static Future<sql.Database> db() async {
+    final sqlDebtors = """CREATE TABLE debtors(
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        firstname TEXT,
+        lastname TEXT,
+        phone TEXT,
+        address TEXT,
+        createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      )""";
 
-     final sqlDebtors =
-      """CREATE TABLE debtors (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-      "firstname TEXT, 
-      lastname TEXT, 
-      phone TEXT, 
-      address TEXT,  
-      createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP""";
-
-  final sqlDebts = """CREATE TABLE debt(
-        debt_id INTEGER AUTOINCREMENT NOT NULL,
+    final sqlDebts = """CREATE TABLE debt(
+        debt_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         product TEXT,
-        price REAL,
-        status INTEGER,
-        createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (debt_id),
-        
-      )
-      """;
-  //FOREIGN KEY(debtors_fk) references debtors(id)
+        price TEXT,
+        status TEXT,
+        createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      )""";
+    //FOREIGN KEY(debtors_fk) references debtors(id)
     return sql.openDatabase(
       'pedefiado.db',
       version: 1,
@@ -43,7 +41,7 @@ class DatabaseHelper {
     );
   }
 
-    /* <!-- Debtors --> */
+  /* <!-- Debtors --> */
 
   // Create new Debtor
   static Future<int> createItem(String? firstname, String? lastname,
@@ -117,15 +115,20 @@ class DatabaseHelper {
 
   // Get a single item by id
   //We dont use this method, it is for you if you want it.
-  static Future<List<Map<String, dynamic>>> getDebt(int debt_id) async {
+  static Future<List<Map<String, dynamic>>> getDebts(int debt_id) async {
     final db = await DatabaseHelper.db();
     return db.query('debt',
         where: "debt_id = ?", whereArgs: [debt_id], limit: 1);
   }
 
+   static Future<List<Map<String, dynamic>>> getDebt() async {
+    final db = await DatabaseHelper.db();
+    return db.query('debt', orderBy: "debt_id");
+  }
+
   // Update an item by id
-  static Future<int> updateDebt(int debt_id, String? product, String? price,
-    String? status) async {
+  static Future<int> updateDebt(
+      int debt_id, String? product, String? price, String? status) async {
     final db = await DatabaseHelper.db();
 
     final data = {
@@ -149,6 +152,4 @@ class DatabaseHelper {
       debugPrint("Algo deu errado ao deletar o produto: $err");
     }
   }
-
 }
-
