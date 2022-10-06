@@ -1,3 +1,4 @@
+import 'package:crudsqlite/services/constants.dart';
 import 'package:crudsqlite/services/helpers/database_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -105,7 +106,7 @@ class _DebtsState extends State<Debts> {
             ));
   }
 
-// Insert a new data to the database
+// Insert a new debt to the database
   Future<void> addDebt() async {
     await DatabaseHelper.createDebt(
       _productController.text,
@@ -130,7 +131,7 @@ class _DebtsState extends State<Debts> {
   void deleteDebt(int debt_id) async {
     await DatabaseHelper.deleteDebt(debt_id);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Successfully deleted!'), backgroundColor: Colors.green));
+        content: Text('Deletado com sucesso!'), backgroundColor: Colors.green));
     _refreshData();
   }
 
@@ -139,6 +140,16 @@ class _DebtsState extends State<Debts> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('PedeFiado'),
+        actions: [
+          IconButton(
+              onPressed: () {
+              /* showSearch(
+                  context: context,
+                  delegate: MySearchDelegate(),
+                );*/
+              },
+              icon: Icon(Icons.search))
+        ],
       ),
       body: _isLoading
           ? const Center(
@@ -149,11 +160,26 @@ class _DebtsState extends State<Debts> {
               : ListView.builder(
                   itemCount: myData.length,
                   itemBuilder: (context, index) => Card(
-                    color: index % 2 == 0 ? Colors.green : Colors.green[200],
+                    color: index % 2 == 0 ? Colors.blue : Colors.blue[200],
                     margin: const EdgeInsets.all(15),
                     child: ListTile(
-                        title: Text(myData[index]['product']),
-                        subtitle: Text(myData[index]['price']),
+                        title: Container(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                myData[index]['product'],
+                                style: kCardText,
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(myData[index]['price'] + '\$',
+                                  style: kCardText),
+                            ],
+                          ),
+                        ),
                         trailing: SizedBox(
                           width: 100,
                           child: Row(
@@ -180,3 +206,19 @@ class _DebtsState extends State<Debts> {
     );
   }
 }
+/*
+class MySearchDelegate extends SearchDelegate {
+  @override
+  Widget? buildLeading(BuildContext context) =>
+      IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back));
+
+  @override
+  List<Widget>? buildActions(BuildContext context) => IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back));
+
+  @override
+  Widget buildResults(BuildContext context) => Container();
+
+  @override
+  Widget buildSuggestions(BuildContext context) => Container();
+}
+*/

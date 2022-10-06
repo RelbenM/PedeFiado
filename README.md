@@ -1,4 +1,4 @@
-# crudsqlite
+# Sistema de Crediário
 
 A new Flutter project.
 

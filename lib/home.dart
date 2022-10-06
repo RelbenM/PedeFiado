@@ -25,21 +25,9 @@ class _HomeState extends State<Home> {
       ),
       body: Center(
           child: Column(
-        children: const [
-          Padding(
-              padding: EdgeInsets.only(top: 40),
-              child: Text(
-                'Bem vindo ',
-                style: kInfoText,
-              )),
-          Divider(color: Colors.black),
-          Padding(
-              padding: EdgeInsets.only(top: 30),
-              child: Text(
-                'Dividas cadastradas',
-                style: kInfoText,
-              )),
-        ],
+        children: [
+          
+          ],
       )),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
